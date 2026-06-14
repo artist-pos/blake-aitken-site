@@ -1,51 +1,57 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function AdminLoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
-  const [errorMsg, setErrorMsg] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setStatus('sending')
-    setErrorMsg('')
+    setLoading(true)
+    setError('')
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/admin`,
-      },
-    })
+    const { error: err } = await supabase.auth.signInWithPassword({ email, password })
 
-    if (error) {
-      setStatus('error')
-      setErrorMsg(error.message)
+    if (err) {
+      setError('Invalid email or password.')
+      setLoading(false)
     } else {
-      setStatus('sent')
+      router.push('/admin')
+      router.refresh()
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    display: 'block',
+    width: '100%',
+    padding: '10px 12px',
+    fontSize: '13px',
+    border: '1px solid rgba(0,0,0,0.15)',
+    outline: 'none',
+    backgroundColor: '#ffffff',
+  }
+
+  const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: '11px',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: '#1a1a1a',
+    marginBottom: '6px',
+  }
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{ backgroundColor: '#f5f5f5' }}
-    >
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f5f5f5' }}>
       <div style={{ width: '100%', maxWidth: '360px', padding: '0 20px' }}>
         <div style={{ marginBottom: '32px' }}>
-          <p
-            style={{
-              fontSize: '15px',
-              fontWeight: 500,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: '#1a1a1a',
-              marginBottom: '4px',
-            }}
-          >
+          <p style={{ fontSize: '15px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#1a1a1a', marginBottom: '4px' }}>
             Blake Aitken
           </p>
           <p style={{ fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888888' }}>
@@ -53,64 +59,52 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
-        {status === 'sent' ? (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <p style={{ fontSize: '14px', color: '#1a1a1a', lineHeight: 1.6 }}>
-              Check your email — a magic link has been sent to <strong>{email}</strong>.
-            </p>
+            <label style={labelStyle}>Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              style={inputStyle}
+            />
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div>
-              <label
-                htmlFor="email"
-                style={{ fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#1a1a1a', display: 'block', marginBottom: '6px' }}
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={status === 'sending'}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  padding: '10px 12px',
-                  fontSize: '13px',
-                  border: '1px solid rgba(0,0,0,0.15)',
-                  outline: 'none',
-                  backgroundColor: '#ffffff',
-                }}
-              />
-            </div>
+          <div>
+            <label style={labelStyle}>Password</label>
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              style={inputStyle}
+            />
+          </div>
 
-            <button
-              type="submit"
-              disabled={status === 'sending'}
-              style={{
-                padding: '12px 24px',
-                fontSize: '12px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: '#ffffff',
-                backgroundColor: status === 'sending' ? '#888888' : '#000000',
-                border: 'none',
-                cursor: status === 'sending' ? 'not-allowed' : 'pointer',
-                transition: 'opacity 150ms',
-              }}
-            >
-              {status === 'sending' ? 'Sending…' : 'Send Magic Link'}
-            </button>
+          {error && (
+            <p style={{ fontSize: '12px', color: '#cc0000' }}>{error}</p>
+          )}
 
-            {status === 'error' && (
-              <p style={{ fontSize: '12px', color: '#cc0000' }}>{errorMsg}</p>
-            )}
-          </form>
-        )}
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              padding: '12px 24px',
+              fontSize: '12px',
+              fontWeight: 500,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: '#ffffff',
+              backgroundColor: loading ? '#888888' : '#000000',
+              border: 'none',
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+        </form>
       </div>
     </div>
   )
