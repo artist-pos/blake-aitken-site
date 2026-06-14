@@ -20,13 +20,17 @@ export default function BlogCard({ post }: Props) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="block p-6 group"
+      className="block group"
       style={{
-        backgroundColor: '#ffffff',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        padding: '24px',
+        backgroundColor: '#f5f5f5',
         transition: 'background-color 150ms',
       }}
-      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#f0f0f0')}
-      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#ffffff')}
+      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#ffffff')}
+      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5')}
     >
       <p
         style={{
@@ -34,7 +38,6 @@ export default function BlogCard({ post }: Props) {
           fontSize: '11px',
           color: '#888888',
           letterSpacing: '0.04em',
-          marginBottom: '8px',
         }}
       >
         {formatDate(post.published_at)}
@@ -42,11 +45,12 @@ export default function BlogCard({ post }: Props) {
 
       <h3
         style={{
-          fontSize: '14px',
+          fontSize: '15px',
           fontWeight: 500,
+          letterSpacing: '0.02em',
           color: '#1a1a1a',
           lineHeight: 1.4,
-          marginBottom: '8px',
+          flex: 1,
         }}
       >
         {post.title}
@@ -55,30 +59,25 @@ export default function BlogCard({ post }: Props) {
       {post.excerpt && (
         <p
           style={{
-            fontSize: '12px',
+            fontSize: '13px',
             color: '#888888',
             lineHeight: 1.6,
-            marginBottom: '12px',
           }}
         >
           {post.excerpt}
         </p>
       )}
 
-      {post.category && (
-        <span
-          style={{
-            fontSize: '11px',
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            color: '#888888',
-            border: '1px solid rgba(0,0,0,0.12)',
-            padding: '2px 6px',
-          }}
-        >
-          {post.category}
-        </span>
-      )}
+      <span
+        style={{
+          fontSize: '11px',
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          color: '#1a1a1a',
+        }}
+      >
+        Read more →
+      </span>
     </Link>
   )
 }

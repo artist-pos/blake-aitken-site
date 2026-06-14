@@ -50,6 +50,26 @@ export default async function ProjectPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      {/* Back */}
+      <div className="px-12 pt-8 pb-0 max-md:px-5 max-md:pt-6">
+        <Link
+          href="/#works"
+          style={{
+            fontSize: '11px',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#888888',
+            display: 'inline-block',
+            marginBottom: '28px',
+            transition: 'opacity 150ms',
+          }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = '0.5')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = '1')}
+        >
+          ← Works
+        </Link>
+      </div>
+
       {/* Header row */}
       <div
         className="flex items-center justify-between px-12 py-4 max-md:px-5 max-md:flex-col max-md:items-start max-md:gap-2"

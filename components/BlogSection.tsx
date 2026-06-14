@@ -27,7 +27,7 @@ interface Props {
 
 export default function BlogSection({ posts }: Props) {
   return (
-    <section className="px-12 py-16 max-md:px-5 max-md:py-10">
+    <section className="px-12 py-10 max-md:px-5 max-md:py-8">
       <div className="flex items-center justify-between mb-6">
         <SectionLabel>Writing</SectionLabel>
         <Link
@@ -49,7 +49,7 @@ export default function BlogSection({ posts }: Props) {
       {posts.length === 0 ? (
         <p style={{ fontSize: '13px', color: '#888888' }}>No posts yet.</p>
       ) : (
-        <div className="grid grid-cols-3 gap-px max-lg:grid-cols-2 max-md:grid-cols-1">
+        <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1" style={{ gap: '2px' }}>
           {posts.map((post) => (
             <BlogCard key={post.id} post={post} />
           ))}

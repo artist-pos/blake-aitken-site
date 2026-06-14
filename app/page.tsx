@@ -35,6 +35,26 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      {/* Statement */}
+      <section
+        className="px-12 py-14 max-md:px-5 max-md:py-9"
+        style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}
+      >
+        <p
+          style={{
+            fontSize: '34px',
+            lineHeight: 1.18,
+            letterSpacing: '-0.02em',
+            fontWeight: 400,
+            maxWidth: '18ch',
+            margin: 0,
+            color: '#1a1a1a',
+          }}
+        >
+          I design civic systems that make invisible social contracts visible.
+        </p>
+      </section>
+
       {/* Featured Work */}
       {featuredProject && <FeaturedWork project={featuredProject} />}
 
@@ -78,36 +98,56 @@ export default async function HomePage() {
               For commissions, collaborations, speaking, or press enquiries.
             </p>
             <div className="flex flex-col gap-3">
-              <Link
-                href="https://www.linkedin.com/in/blake-aitken-558254246/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: '12px',
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  color: '#1a1a1a',
-                  transition: 'opacity 150ms',
-                }}
-                className="hover:opacity-50 transition-opacity duration-150"
-              >
-                → LinkedIn
-              </Link>
-              <Link
-                href="https://www.instagram.com/blakaitken"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: '12px',
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  color: '#1a1a1a',
-                  transition: 'opacity 150ms',
-                }}
-                className="hover:opacity-50 transition-opacity duration-150"
-              >
-                → Instagram
-              </Link>
+              {[
+                ['https://patronage.nz/blakeaitken', '→ Patronage'],
+                ['https://www.instagram.com/blakaitken', '→ Instagram'],
+                ['https://www.linkedin.com/in/blake-aitken-558254246/', '→ LinkedIn'],
+              ].map(([href, label]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: '12px',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    color: '#1a1a1a',
+                    transition: 'opacity 150ms',
+                  }}
+                  className="hover:opacity-50 transition-opacity duration-150"
+                >
+                  {label}
+                </Link>
+              ))}
+              <details>
+                <summary
+                  style={{
+                    fontSize: '12px',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    color: '#1a1a1a',
+                    cursor: 'pointer',
+                    listStyle: 'none',
+                    transition: 'opacity 150ms',
+                  }}
+                  className="hover:opacity-50 transition-opacity duration-150"
+                >
+                  → Phone
+                </summary>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-jetbrains-mono)',
+                    fontSize: '12px',
+                    color: '#888888',
+                    display: 'block',
+                    marginTop: '6px',
+                    paddingLeft: '14px',
+                  }}
+                >
+                  +64 27 536 4850
+                </span>
+              </details>
             </div>
           </div>
 

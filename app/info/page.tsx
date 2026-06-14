@@ -63,22 +63,25 @@ export default function InfoPage() {
           {/* Right — bio + facts */}
           <div>
             {/* Facts */}
-            <div className="flex flex-col gap-4 mb-10" style={{ borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBottom: '32px' }}>
+            <dl
+              className="flex flex-col gap-4 mb-10"
+              style={{ borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBottom: '32px' }}
+            >
               {[
                 ['Location', 'Kirikiriroa (Hamilton), Aotearoa New Zealand'],
                 ['Education', 'Bachelor of Architectural Studies, University of Auckland, 2023'],
                 ['Practice', 'Public Art, Architecture, Urban Strategy'],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <span
-                    style={{ fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#888888', display: 'block', marginBottom: '3px' }}
+                  <dt
+                    style={{ fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#888888', marginBottom: '3px' }}
                   >
                     {label}
-                  </span>
-                  <span style={{ fontSize: '13px', color: '#1a1a1a' }}>{value}</span>
+                  </dt>
+                  <dd style={{ margin: 0, fontSize: '13px', color: '#1a1a1a' }}>{value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
 
             {/* Bio paragraphs */}
             <div className="flex flex-col gap-4 mb-10">

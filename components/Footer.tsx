@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 function NZTime() {
@@ -46,21 +45,6 @@ export default function Footer() {
         <span style={{ ...text, textAlign: 'right' }} className="max-md:text-left">
           Kirikiriroa, Aotearoa NZ · <NZTime />
         </span>
-      </div>
-
-      {/* Row 2: Blog centred */}
-      <div className="grid grid-cols-3 px-12 pt-2 pb-12 max-md:px-5 max-md:pb-8">
-        <span />
-        <div className="flex justify-center max-md:justify-start">
-          <Link
-            href="/blog"
-            style={{ ...text, color: '#1a1a1a' }}
-            className="hover:opacity-50 transition-opacity duration-150"
-          >
-            Blog
-          </Link>
-        </div>
-        <span />
       </div>
     </footer>
   )

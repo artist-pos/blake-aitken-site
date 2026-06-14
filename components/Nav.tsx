@@ -38,7 +38,7 @@ export default function Nav() {
     >
       <div className="flex items-center justify-between px-12 py-3 max-md:px-5">
         {/* Wordmark */}
-        <Link href="/" className="flex flex-col gap-0">
+        <Link href="/" className="flex flex-col gap-1">
           <span
             style={{
               fontSize: '15px',
