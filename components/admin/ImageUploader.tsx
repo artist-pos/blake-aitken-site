@@ -40,65 +40,81 @@ function SortableImage({
   img,
   onDelete,
   onSetThumbnail,
+  onCaptionSave,
 }: {
   img: ProjectImage
   onDelete: (img: ProjectImage) => void
   onSetThumbnail: (img: ProjectImage) => void
+  onCaptionSave: (img: ProjectImage, caption: string) => void
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: img.id })
 
   return (
     <div
       ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-        opacity: isDragging ? 0.4 : 1,
-        aspectRatio: '1',
-        position: 'relative',
-        backgroundColor: '#f0f0f0',
-        overflow: 'hidden',
-      }}
-      className="group"
+      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }}
     >
-      {/* Drag handle — whole tile is draggable */}
+      {/* Square image tile */}
       <div
-        {...attributes}
-        {...listeners}
-        style={{ position: 'absolute', inset: 0, zIndex: 1, cursor: 'grab', touchAction: 'none' }}
-      />
-
-      <Image src={img.url} alt="" fill className="object-cover" sizes="200px" />
-
-      {img.is_thumbnail && (
-        <span
-          className="absolute top-1 left-1"
-          style={{ fontSize: '9px', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ffffff', backgroundColor: '#000000', padding: '2px 5px', zIndex: 2 }}
-        >
-          Thumb
-        </span>
-      )}
-
-      {/* Controls on hover */}
-      <div
-        className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100"
-        style={{ backgroundColor: 'rgba(0,0,0,0.5)', transition: 'opacity 150ms', zIndex: 2 }}
+        style={{ aspectRatio: '1', position: 'relative', backgroundColor: '#f0f0f0', overflow: 'hidden' }}
+        className="group"
       >
-        <button
-          type="button"
-          onClick={() => onSetThumbnail(img)}
-          style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: img.is_thumbnail ? '#ffd700' : '#ffffff', cursor: 'pointer' }}
+        <div
+          {...attributes}
+          {...listeners}
+          style={{ position: 'absolute', inset: 0, zIndex: 1, cursor: 'grab', touchAction: 'none' }}
+        />
+
+        <Image src={img.url} alt="" fill className="object-cover" sizes="200px" />
+
+        {img.is_thumbnail && (
+          <span
+            className="absolute top-1 left-1"
+            style={{ fontSize: '9px', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ffffff', backgroundColor: '#000000', padding: '2px 5px', zIndex: 2 }}
+          >
+            Thumb
+          </span>
+        )}
+
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)', transition: 'opacity 150ms', zIndex: 2 }}
         >
-          {img.is_thumbnail ? '★ Thumbnail' : '☆ Set Thumb'}
-        </button>
-        <button
-          type="button"
-          onClick={() => onDelete(img)}
-          style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ff6b6b', cursor: 'pointer' }}
-        >
-          Delete
-        </button>
+          <button
+            type="button"
+            onClick={() => onSetThumbnail(img)}
+            style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: img.is_thumbnail ? '#ffd700' : '#ffffff', cursor: 'pointer' }}
+          >
+            {img.is_thumbnail ? '★ Thumbnail' : '☆ Set Thumb'}
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(img)}
+            style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ff6b6b', cursor: 'pointer' }}
+          >
+            Delete
+          </button>
+        </div>
       </div>
+
+      {/* Caption input */}
+      <input
+        type="text"
+        defaultValue={img.alt ?? ''}
+        placeholder="Caption…"
+        onBlur={(e) => onCaptionSave(img, e.target.value)}
+        style={{
+          width: '100%',
+          fontSize: '10px',
+          fontStyle: 'italic',
+          padding: '4px 6px',
+          border: '1px solid rgba(0,0,0,0.1)',
+          borderTop: 'none',
+          outline: 'none',
+          color: '#1a1a1a',
+          backgroundColor: '#fafafa',
+        }}
+      />
     </div>
   )
 }
@@ -167,6 +183,12 @@ export default function ImageUploader({ projectId, images, onUpdate }: Props) {
     onUpdate(images.map((i) => ({ ...i, is_thumbnail: i.id === img.id })))
   }
 
+  async function handleCaptionSave(img: ProjectImage, caption: string) {
+    const supabase = createClient()
+    await supabase.from('project_images').update({ alt: caption || null }).eq('id', img.id)
+    onUpdate(images.map((i) => (i.id === img.id ? { ...i, alt: caption || undefined } : i)))
+  }
+
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (!over || active.id === over.id) return
@@ -214,7 +236,7 @@ export default function ImageUploader({ projectId, images, onUpdate }: Props) {
             <SortableContext items={images.map((i) => i.id)} strategy={rectSortingStrategy}>
               <div className="grid grid-cols-4 gap-2 max-md:grid-cols-2">
                 {images.map((img) => (
-                  <SortableImage key={img.id} img={img} onDelete={handleDelete} onSetThumbnail={handleSetThumbnail} />
+                  <SortableImage key={img.id} img={img} onDelete={handleDelete} onSetThumbnail={handleSetThumbnail} onCaptionSave={handleCaptionSave} />
                 ))}
               </div>
             </SortableContext>

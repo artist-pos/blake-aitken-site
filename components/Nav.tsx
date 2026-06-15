@@ -71,17 +71,14 @@ export default function Nav() {
             <Link
               key={href}
               href={href}
+              className="transition-opacity duration-150 hover:opacity-50"
               style={{
                 fontSize: '13px',
                 fontWeight: 400,
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 color: '#1a1a1a',
-                opacity: 1,
-                transition: 'opacity 150ms',
               }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = '0.5')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = '1')}
             >
               {label}
             </Link>

@@ -2,9 +2,6 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
-import { headers } from 'next/headers'
 import './globals.css'
 
 const inter = Inter({
@@ -38,21 +35,15 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname') ?? ''
-  const isAdmin = pathname.startsWith('/admin')
-
   return (
     <html lang="en-NZ" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body>
-        {!isAdmin && <Nav />}
-        <main className="flex-1">{children}</main>
-        {!isAdmin && <Footer />}
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>

@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Project } from '@/lib/types'
 
+const DISPLAY_HEIGHT = 64
+
 interface Props {
   projects: Project[]
 }
@@ -12,6 +14,12 @@ export default function ProjectListView({ projects }: Props) {
       {projects.map((project, i) => {
         const thumbnail =
           project.images?.find((img) => img.is_thumbnail) ?? project.images?.[0]
+
+        // Compute display width from stored aspect ratio so full image is visible
+        const displayWidth = thumbnail
+          ? Math.round(DISPLAY_HEIGHT * (thumbnail.width / thumbnail.height))
+          : DISPLAY_HEIGHT
+
         return (
           <Link
             key={project.id}
@@ -35,18 +43,19 @@ export default function ProjectListView({ projects }: Props) {
               {String(i + 1).padStart(2, '0')}
             </span>
 
-            {/* Thumbnail */}
-            {thumbnail && (
-              <div className="relative overflow-hidden flex-shrink-0" style={{ width: 64, height: 48 }}>
+            {/* Thumbnail — natural aspect ratio, no cropping */}
+            <div style={{ width: displayWidth, height: DISPLAY_HEIGHT, flexShrink: 0 }}>
+              {thumbnail && (
                 <Image
                   src={thumbnail.url}
                   alt={thumbnail.alt ?? project.title}
-                  fill
-                  sizes="64px"
-                  className="object-cover"
+                  width={displayWidth}
+                  height={DISPLAY_HEIGHT}
+                  style={{ width: displayWidth, height: DISPLAY_HEIGHT, objectFit: 'contain' }}
+                  sizes={`${displayWidth}px`}
                 />
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Title */}
             <div className="flex-1 min-w-0">

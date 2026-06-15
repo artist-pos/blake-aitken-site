@@ -11,6 +11,10 @@ export interface Project {
   sort_order: number
   tags: string[]
   model_url?: string
+  grid_row_height: number
+  grid_h_gap: number
+  grid_v_gap: number
+  grid_last_row: 'left' | 'center' | 'fill'
   created_at: string
   updated_at: string
   images?: ProjectImage[]

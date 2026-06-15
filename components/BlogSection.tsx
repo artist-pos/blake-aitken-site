@@ -29,7 +29,7 @@ export default function BlogSection({ posts }: Props) {
   return (
     <section className="px-12 py-10 max-md:px-5 max-md:py-8">
       <div className="flex items-center justify-between mb-6">
-        <SectionLabel>Writing</SectionLabel>
+        <SectionLabel>Notes</SectionLabel>
         <Link
           href="/blog"
           style={{

@@ -6,6 +6,7 @@ import AdminSignOut from './SignOut'
 const navItems = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/projects', label: 'Projects' },
+  { href: '/admin/hero', label: 'Hero' },
   { href: '/admin/blog', label: 'Blog' },
   { href: '/admin/messages', label: 'Messages' },
 ]

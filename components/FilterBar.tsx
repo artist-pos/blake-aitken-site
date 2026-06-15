@@ -16,7 +16,6 @@ export default function FilterBar({ active, view, onCategory, onView }: Props) {
       id="works"
       className="flex items-center justify-between px-12 max-md:px-5"
       style={{
-        borderTop: '1px solid rgba(0,0,0,0.08)',
         borderBottom: '1px solid rgba(0,0,0,0.08)',
         paddingTop: '10px',
         paddingBottom: '10px',

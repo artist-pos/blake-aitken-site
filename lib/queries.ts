@@ -102,6 +102,35 @@ export async function getAllProjectSlugs(): Promise<string[]> {
   return (data ?? []).map((p) => p.slug)
 }
 
+export interface HomeSlide {
+  id: string
+  image_url: string
+  image_width: number
+  image_height: number
+  link_href: string
+  sort_order: number
+}
+
+export async function getSiteSetting(key: string): Promise<string | null> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('site_settings')
+    .select('value')
+    .eq('key', key)
+    .maybeSingle()
+  return data?.value ?? null
+}
+
+export async function getHomeSlides(): Promise<HomeSlide[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('home_slides')
+    .select('id, image_url, image_width, image_height, link_href, sort_order')
+    .eq('enabled', true)
+    .order('sort_order')
+  return data ?? []
+}
+
 export async function getAllPostSlugs(): Promise<string[]> {
   const supabase = createStaticClient()
   const { data } = await supabase

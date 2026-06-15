@@ -16,16 +16,14 @@ export default function AdminSignOut() {
   return (
     <button
       onClick={handleSignOut}
+      className="transition-opacity duration-150 hover:opacity-50"
       style={{
         fontSize: '11px',
         letterSpacing: '0.06em',
         textTransform: 'uppercase',
         color: '#888888',
         cursor: 'pointer',
-        transition: 'opacity 150ms',
       }}
-      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = '0.5')}
-      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = '1')}
     >
       Sign Out
     </button>

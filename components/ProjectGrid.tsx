@@ -55,6 +55,7 @@ export default function ProjectGrid({ projects }: Props) {
         render={{
           photo: (_, { photo, width, height }) => (
             <Link
+              key={(photo as GridPhoto).slug}
               href={`/work/${(photo as GridPhoto).slug}`}
               className="relative block overflow-hidden group"
               style={{ width, height, flexShrink: 0 }}
