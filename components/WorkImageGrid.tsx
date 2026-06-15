@@ -30,16 +30,14 @@ export default function WorkImageGrid({
     lastRow === 'center' ? 'center' : lastRow === 'fill' ? 'stretch' : 'flex-start'
 
   return (
+    <div className="work-image-grid" style={{ position: 'relative' }}>
+      <style>{`.work-image-grid .react-photo-album--track:last-child{justify-content:${trackJustify}}`}</style>
     <RowsPhotoAlbum
       photos={photos}
       targetRowHeight={rowHeight}
       spacing={hGap}
       componentsProps={{
         container: { style: { rowGap: `${vGap}px` } },
-        track: (_, { track }) => {
-          const isLastRow = track === undefined
-          return isLastRow ? { style: { justifyContent: trackJustify } } : {}
-        },
       }}
       render={{
         photo: (_, { photo, width, height }) => {
@@ -78,5 +76,6 @@ export default function WorkImageGrid({
         },
       }}
     />
+    </div>
   )
 }
