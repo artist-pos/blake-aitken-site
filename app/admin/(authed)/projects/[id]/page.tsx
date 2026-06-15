@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import MarkdownEditor from '@/components/admin/MarkdownEditor'
 import ImageUploader from '@/components/admin/ImageUploader'
+import DevelopmentEditor from '@/components/admin/DevelopmentEditor'
 import type { Project, ProjectImage } from '@/lib/types'
 import { use } from 'react'
 
@@ -154,6 +155,14 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           Images
         </h2>
         <ImageUploader projectId={id} images={images} onUpdate={setImages} />
+      </div>
+
+      {/* Development log */}
+      <div style={{ marginTop: '48px', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '32px' }}>
+        <h2 style={{ fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#888888', marginBottom: '16px' }}>
+          Development
+        </h2>
+        <DevelopmentEditor projectId={id} slug={form.slug} />
       </div>
     </div>
   )

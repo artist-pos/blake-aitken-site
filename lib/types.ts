@@ -44,6 +44,24 @@ export interface BlogPost {
   updated_at: string
 }
 
+export interface DevImage {
+  url: string
+  width: number
+  height: number
+  alt: string
+}
+
+export interface ProjectDevelopment {
+  id: string
+  project_id: string
+  title: string | null
+  date: string | null
+  body: string | null
+  images: DevImage[]
+  sort_order: number
+  created_at: string
+}
+
 export interface FormSubmission {
   id: string
   name: string

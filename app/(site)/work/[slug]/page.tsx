@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
-import { getProjectBySlug, getAdjacentProjects } from '@/lib/queries'
+import { getProjectBySlug, getAdjacentProjects, getProjectDevelopments } from '@/lib/queries'
 import { projectMetadata } from '@/lib/metadata'
 import MarkdownContent from '@/components/MarkdownContent'
 import ThreeDViewerDynamic from '@/components/ThreeDViewerDynamic'
 import WorkLayoutShell from '@/components/WorkLayoutShell'
+import ProjectDevelopmentSection from '@/components/ProjectDevelopmentSection'
 import { createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -31,9 +32,10 @@ export default async function ProjectPage({
   const [project, supabase] = await Promise.all([getProjectBySlug(slug), createClient()])
   if (!project) notFound()
 
-  const [{ prev, next }, { data: { user } }] = await Promise.all([
+  const [{ prev, next }, { data: { user } }, developments] = await Promise.all([
     getAdjacentProjects(project.sort_order ?? 0),
     supabase.auth.getUser(),
+    getProjectDevelopments(project.id),
   ])
   const isAdmin = user?.email === 'blakeaitkenwork@gmail.com'
   const images = (project.images ?? []).sort((a, b) => a.sort_order - b.sort_order)
@@ -182,6 +184,9 @@ export default async function ProjectPage({
           </div>
         </div>
       </div>
+
+      {/* Development log */}
+      <ProjectDevelopmentSection entries={developments} />
 
       {/* Prev / Next */}
       <nav

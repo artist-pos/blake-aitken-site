@@ -131,6 +131,16 @@ export async function getHomeSlides(): Promise<HomeSlide[]> {
   return data ?? []
 }
 
+export async function getProjectDevelopments(projectId: string) {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('project_developments')
+    .select('*')
+    .eq('project_id', projectId)
+    .order('sort_order')
+  return (data ?? []) as import('./types').ProjectDevelopment[]
+}
+
 export async function getAllPostSlugs(): Promise<string[]> {
   const supabase = createStaticClient()
   const { data } = await supabase
