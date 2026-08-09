@@ -1,0 +1,36 @@
+{
+  "projectId": "0e7c1a1d-6193-438c-8a84-c3cde2aacde5",
+  "shape": "package",
+  "pkg": "blake-aitken-site",
+  "globalName": "BlakeAitken",
+  "srcDir": "components",
+  "tsconfig": ".design-sync/tsconfig.sync.json",
+  "cssEntry": ".design-sync/.cache/css/site.css",
+  "componentSrcMap": {
+    "Nav": "components/Nav.tsx",
+    "Footer": "components/Footer.tsx",
+    "HeroSection": "components/HeroSection.tsx",
+    "FeaturedWork": "components/FeaturedWork.tsx",
+    "FilterBar": "components/FilterBar.tsx",
+    "ProjectSection": "components/ProjectSection.tsx",
+    "ProjectGrid": "components/ProjectGrid.tsx",
+    "ProjectListView": "components/ProjectListView.tsx",
+    "ProjectDevelopmentSection": "components/ProjectDevelopmentSection.tsx",
+    "WorkImageGrid": "components/WorkImageGrid.tsx",
+    "Lightbox": "components/Lightbox.tsx",
+    "BlogCard": "components/BlogCard.tsx",
+    "BlogSection": "components/BlogSection.tsx",
+    "MarkdownContent": "components/MarkdownContent.tsx",
+    "ContactForm": "components/ContactForm.tsx",
+
+    "AdminBar": null,
+    "AdminLayoutBar": null,
+    "WorkLayoutShell": null,
+    "ThreeDViewer": null,
+    "ThreeDViewerDynamic": null,
+    "SortableList": null,
+    "ImageUploader": null,
+    "MarkdownEditor": null,
+    "DevelopmentEditor": null
+  }
+}
