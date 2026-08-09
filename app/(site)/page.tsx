@@ -6,11 +6,19 @@ import ProjectSection from '@/components/ProjectSection'
 import BlogSection from '@/components/BlogSection'
 import ContactForm from '@/components/ContactForm'
 import AdminBar from '@/components/AdminBar'
+import UnderConstruction from '@/components/UnderConstruction'
+import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
 export const metadata: Metadata = homeMetadata()
 
 export default async function HomePage() {
+  // Gate before fetching: while the holding page is up, a public visitor should
+  // not cost four Supabase round-trips for content they never see.
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (user?.email !== 'blakeaitkenwork@gmail.com') return <UnderConstruction />
+
   const [allProjects, recentPosts, slides, heroStatement] = await Promise.all([
     getProjects(),
     getRecentPosts(3),
