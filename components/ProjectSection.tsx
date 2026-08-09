@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import FilterBar from './FilterBar'
-import ProjectGrid from './ProjectGrid'
+import DisciplineIndex from './DisciplineIndex'
 import ProjectListView from './ProjectListView'
 import type { Project } from '@/lib/types'
 
@@ -30,7 +30,7 @@ export default function ProjectSection({ projects }: Props) {
         onView={setView}
       />
       {view === 'grid' ? (
-        <ProjectGrid projects={filtered} />
+        <DisciplineIndex projects={filtered} />
       ) : (
         <ProjectListView projects={filtered} />
       )}
