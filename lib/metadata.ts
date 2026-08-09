@@ -34,7 +34,7 @@ export function projectMetadata(project: Project): Metadata {
     project.description?.replace(/[#*_[\]]/g, '').slice(0, 160) ?? DEFAULT_DESCRIPTION
   const thumbnail = project.images?.find((i) => i.is_thumbnail) ?? project.images?.[0]
   const image = thumbnail?.url ?? `${SITE_URL}/api/og`
-  const url = `${SITE_URL}/work/${project.slug}`
+  const url = `${SITE_URL}/${project.slug}`
   return {
     title,
     description,

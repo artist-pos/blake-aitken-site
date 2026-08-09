@@ -195,7 +195,7 @@ export default async function ProjectPage({
       >
         {prev ? (
           <Link
-            href={`/work/${prev.slug}`}
+            href={`/${prev.slug}`}
             className="flex flex-col gap-1 hover:opacity-50 transition-opacity duration-150"
           >
             <span style={{ fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888888' }}>← Previous</span>
@@ -207,7 +207,7 @@ export default async function ProjectPage({
 
         {next && (
           <Link
-            href={`/work/${next.slug}`}
+            href={`/${next.slug}`}
             className="flex flex-col gap-1 text-right hover:opacity-50 transition-opacity duration-150"
           >
             <span style={{ fontSize: '11px', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888888' }}>Next →</span>

@@ -9,5 +9,5 @@ export async function deleteDevelopmentEntry(id: string, slug: string) {
   if (!user || user.email !== 'blakeaitkenwork@gmail.com') throw new Error('Unauthorized')
 
   await supabase.from('project_developments').delete().eq('id', id)
-  revalidatePath(`/work/${slug}`)
+  revalidatePath(`/${slug}`)
 }

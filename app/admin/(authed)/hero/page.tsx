@@ -104,7 +104,7 @@ export default function HeroAdminPage() {
     setSelImageUrl('')
     setSelImageDims(null)
     const proj = projects.find(p => p.id === id)
-    if (proj) setLinkHref(`/work/${proj.slug}`)
+    if (proj) setLinkHref(`/${proj.slug}`)
   }
 
   async function addSlide() {
@@ -293,7 +293,7 @@ export default function HeroAdminPage() {
 
           <div className="mb-5">
             <label style={labelStyle}>Links to</label>
-            <input type="text" value={linkHref} onChange={e => setLinkHref(e.target.value)} placeholder="/work/some-slug  or  /notes/some-slug" style={inputStyle} />
+            <input type="text" value={linkHref} onChange={e => setLinkHref(e.target.value)} placeholder="/some-slug  or  /notes/some-slug" style={inputStyle} />
             <p style={{ fontSize: '10px', color: '#888888', marginTop: '4px' }}>Auto-filled when you pick a project — edit to link to a note instead.</p>
           </div>
 

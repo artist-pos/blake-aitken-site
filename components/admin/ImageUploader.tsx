@@ -76,21 +76,23 @@ function SortableImage({
           </span>
         )}
 
+        {/* Lets pointer events fall through to the drag handle beneath; the
+            buttons re-enable them for themselves. */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)', transition: 'opacity 150ms', zIndex: 2 }}
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)', transition: 'opacity 150ms', zIndex: 2, pointerEvents: 'none' }}
         >
           <button
             type="button"
             onClick={() => onSetThumbnail(img)}
-            style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: img.is_thumbnail ? '#ffd700' : '#ffffff', cursor: 'pointer' }}
+            style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: img.is_thumbnail ? '#ffd700' : '#ffffff', cursor: 'pointer', pointerEvents: 'auto' }}
           >
             {img.is_thumbnail ? '★ Thumbnail' : '☆ Set Thumb'}
           </button>
           <button
             type="button"
             onClick={() => onDelete(img)}
-            style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ff6b6b', cursor: 'pointer' }}
+            style={{ fontSize: '10px', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ff6b6b', cursor: 'pointer', pointerEvents: 'auto' }}
           >
             Delete
           </button>

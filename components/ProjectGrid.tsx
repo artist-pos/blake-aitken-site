@@ -21,6 +21,9 @@ interface Props {
   projects: Project[]
 }
 
+const rowHeight = (w: number) => (w < 768 ? 150 : w < 1024 ? 200 : 250)
+const SINGLE_ROW_MAX_H = 480
+
 export default function ProjectGrid({ projects }: Props) {
   const photos: GridPhoto[] = projects.flatMap((project) => {
     const thumbnail =
@@ -50,13 +53,23 @@ export default function ProjectGrid({ projects }: Props) {
     <div className="px-12 py-6 max-md:px-5 max-md:py-4">
       <RowsPhotoAlbum
         photos={photos}
-        targetRowHeight={(w) => (w < 768 ? 150 : w < 1024 ? 200 : 250)}
+        targetRowHeight={rowHeight}
+        // A single row is justified to fill the container, which with only two
+        // portrait thumbnails scales them past 1200px tall. Cap it, echoing the
+        // hero carousel's own max height so the page keeps one rhythm.
+        //
+        // Must stay a constant: capping makes the album shrink to the row's
+        // natural width, so a width-derived value re-resolves against the width
+        // it just shrank and collapses to the smallest branch.
+        rowConstraints={{ singleRowMaxHeight: SINGLE_ROW_MAX_H }}
+        // Capping shrinks the album, so centre it rather than strand it left.
+        componentsProps={{ container: { style: { marginInline: 'auto' } } }}
         spacing={2}
         render={{
           photo: (_, { photo, width, height }) => (
             <Link
               key={(photo as GridPhoto).slug}
-              href={`/work/${(photo as GridPhoto).slug}`}
+              href={`/${(photo as GridPhoto).slug}`}
               className="relative block overflow-hidden group"
               style={{ width, height, flexShrink: 0 }}
             >

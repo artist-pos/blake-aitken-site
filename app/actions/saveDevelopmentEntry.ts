@@ -35,7 +35,7 @@ export async function saveDevelopmentEntry(entry: {
       .select()
       .single()
     if (error) throw error
-    revalidatePath(`/work/${entry.slug}`)
+    revalidatePath(`/${entry.slug}`)
     return data
   } else {
     const { data, error } = await supabase
@@ -44,7 +44,7 @@ export async function saveDevelopmentEntry(entry: {
       .select()
       .single()
     if (error) throw error
-    revalidatePath(`/work/${entry.slug}`)
+    revalidatePath(`/${entry.slug}`)
     return data
   }
 }

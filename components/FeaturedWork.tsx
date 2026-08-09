@@ -32,7 +32,7 @@ export default function FeaturedWork({ project }: Props) {
     <section className="px-12 pt-12 pb-16 max-md:px-5 max-md:pt-8 max-md:pb-10">
       <SectionLabel>Featured Work</SectionLabel>
 
-      <Link href={`/work/${project.slug}`} className="block group">
+      <Link href={`/${project.slug}`} className="block group">
         {/* Image grid */}
         <div className="flex gap-0.5" style={{ gap: '2px' }}>
           {/* Main image — left, 16/10 */}

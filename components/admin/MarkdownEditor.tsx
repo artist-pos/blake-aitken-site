@@ -1,8 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import MarkdownContent from '@/components/MarkdownContent'
 
 interface Props {
   name: string
@@ -156,17 +155,14 @@ export default function MarkdownEditor({ name, value, onChange, disabled }: Prop
         />
       ) : (
         <div
-          className="prose prose-sm max-w-none"
           style={{
             minHeight: '300px',
             padding: '16px',
-            fontSize: '14px',
-            lineHeight: 1.7,
             backgroundColor: '#ffffff',
           }}
         >
           {value ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{value}</ReactMarkdown>
+            <MarkdownContent content={value} />
           ) : (
             <p style={{ color: '#888888', fontSize: '13px' }}>Nothing to preview.</p>
           )}

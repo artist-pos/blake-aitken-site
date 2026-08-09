@@ -23,7 +23,7 @@ export default function ProjectListView({ projects }: Props) {
         return (
           <Link
             key={project.id}
-            href={`/work/${project.slug}`}
+            href={`/${project.slug}`}
             className="flex items-center gap-5 py-4 group"
             style={{
               borderBottom: '1px solid rgba(0,0,0,0.08)',

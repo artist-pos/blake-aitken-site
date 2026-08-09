@@ -1,9 +1,13 @@
 'use client'
 
+import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { RowsPhotoAlbum } from 'react-photo-album'
 import 'react-photo-album/rows.css'
 import type { ProjectImage } from '@/lib/types'
+
+const Lightbox = dynamic(() => import('./Lightbox'), { ssr: false })
 
 type WorkPhoto = ProjectImage & { src: string }
 
@@ -25,9 +29,13 @@ export default function WorkImageGrid({
   lastRow = 'left',
 }: Props) {
   const photos: WorkPhoto[] = images.map((img) => ({ ...img, src: img.url }))
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
+  // 'stretch' is not a valid flex justify-content value — it falls back to
+  // flex-start. 'space-between' spans the row edge to edge, making hGap a
+  // minimum rather than an exact gap on the final row.
   const trackJustify =
-    lastRow === 'center' ? 'center' : lastRow === 'fill' ? 'stretch' : 'flex-start'
+    lastRow === 'center' ? 'center' : lastRow === 'fill' ? 'space-between' : 'flex-start'
 
   return (
     <div className="work-image-grid" style={{ position: 'relative' }}>
@@ -40,7 +48,7 @@ export default function WorkImageGrid({
         container: { style: { rowGap: `${vGap}px` } },
       }}
       render={{
-        photo: (_, { photo, width, height }) => {
+        photo: (_, { photo, width, height, index }) => {
           const img = photo as WorkPhoto
           return (
             <figure
@@ -53,6 +61,20 @@ export default function WorkImageGrid({
                 fill
                 sizes={`${Math.round(width)}px`}
                 style={{ objectFit: 'cover' }}
+              />
+              <button
+                type="button"
+                onClick={() => setOpenIndex(index)}
+                aria-label={`Enlarge ${img.alt ?? `image ${index + 1}`}`}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  zIndex: 1,
+                  cursor: 'zoom-in',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                }}
               />
               {img.alt && (
                 <figcaption
@@ -76,6 +98,15 @@ export default function WorkImageGrid({
         },
       }}
     />
+      {openIndex !== null && (
+        <Lightbox
+          images={images}
+          index={openIndex}
+          projectTitle={projectTitle}
+          onClose={() => setOpenIndex(null)}
+          onNavigate={setOpenIndex}
+        />
+      )}
     </div>
   )
 }

@@ -22,5 +22,5 @@ export async function updateProjectLayout(
     })
     .eq('id', projectId)
 
-  revalidatePath(`/work/${slug}`)
+  revalidatePath(`/${slug}`)
 }
