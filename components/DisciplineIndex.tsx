@@ -58,59 +58,43 @@ interface Row {
   incomplete: boolean
 }
 
+// Widths are fractional, and a row is justified to exactly the container width.
+// Rounding up on even one tile overshoots the container and hands Chrome a
+// horizontal scrollbar for the whole page, so always round down: the row falls
+// a pixel or two short instead, which is invisible.
+const atHeight = (t: Tile, h: number) => ({ ...t, width: Math.floor(t.aspect * h) })
+
 /**
  * Justified rows: fill each row to the container, then scale its height so the
- * aspect ratios survive. A trailing incomplete row keeps the target height
- * instead of being stretched to fit — stretching one or two portrait thumbnails
- * across a wide container is what blows them up past 1000px tall. 'fill' opts
- * back into that stretch deliberately.
+ * aspect ratios survive.
+ *
+ * A trailing incomplete row always keeps the target height. Scaling it to fill
+ * the width instead is what blows a lone portrait up past 1000px tall — so
+ * 'fill' spreads the tiles apart at their natural height rather than stretching
+ * them, matching what the same control does on a work page.
  */
-function justifyRows(
-  items: Tile[],
-  containerWidth: number,
-  gap: number,
-  targetH: number,
-  lastRow: GridLayout['lastRow']
-): Row[] {
+function justifyRows(items: Tile[], containerWidth: number, gap: number, targetH: number): Row[] {
   if (!containerWidth) {
-    return [
-      {
-        height: targetH,
-        items: items.map((i) => ({ ...i, width: i.aspect * targetH })),
-        incomplete: true,
-      },
-    ]
+    return [{ height: targetH, items: items.map((i) => atHeight(i, targetH)), incomplete: true }]
   }
 
   const rows: Row[] = []
   let row: Tile[] = []
   let aspectSum = 0
 
-  const justify = (of: Tile[], sum: number): Row => {
-    const h = (containerWidth - (of.length - 1) * gap) / sum
-    return { height: h, items: of.map((x) => ({ ...x, width: x.aspect * h })), incomplete: false }
-  }
-
   for (const item of items) {
     row.push(item)
     aspectSum += item.aspect
     if (aspectSum * targetH + (row.length - 1) * gap >= containerWidth) {
-      rows.push(justify(row, aspectSum))
+      const h = (containerWidth - (row.length - 1) * gap) / aspectSum
+      rows.push({ height: h, items: row.map((x) => atHeight(x, h)), incomplete: false })
       row = []
       aspectSum = 0
     }
   }
 
   if (row.length) {
-    rows.push(
-      lastRow === 'fill'
-        ? justify(row, aspectSum)
-        : {
-            height: targetH,
-            items: row.map((x) => ({ ...x, width: x.aspect * targetH })),
-            incomplete: true,
-          }
-    )
+    rows.push({ height: targetH, items: row.map((x) => atHeight(x, targetH)), incomplete: true })
   }
 
   return rows
@@ -213,7 +197,7 @@ export default function DisciplineIndex({ projects, isAdmin = false, layouts = [
       .filter((g) => g.tiles.length > 0)
       .map((g) => ({
         ...g,
-        rows: justifyRows(g.tiles, width, g.layout.hGap, g.layout.rowHeight, g.layout.lastRow),
+        rows: justifyRows(g.tiles, width, g.layout.hGap, g.layout.rowHeight),
       }))
   }, [projects, width, orders, draftLayouts, savedLayouts])
 
@@ -330,8 +314,19 @@ function DisciplineGroup({
       className="flex items-start"
       style={{
         gap: `${layout.hGap}px`,
-        marginBottom: `${layout.vGap}px`,
-        justifyContent: row.incomplete && layout.lastRow === 'center' ? 'center' : 'flex-start',
+        // Not on the last row: the discipline's own bottom margin already
+        // separates it from the next heading, and doubling them is what made
+        // the vertical rhythm look off.
+        marginBottom: r === rows.length - 1 ? 0 : `${layout.vGap}px`,
+        // 'space-between' spreads a short trailing row edge to edge without
+        // scaling it, which makes hGap a minimum rather than an exact gap.
+        justifyContent: !row.incomplete
+          ? 'flex-start'
+          : layout.lastRow === 'center'
+            ? 'center'
+            : layout.lastRow === 'fill'
+              ? 'space-between'
+              : 'flex-start',
       }}
     >
       {row.items.map((item) => {
@@ -459,7 +454,11 @@ function TileBody({ item, height, caret }: TileProps) {
           src={item.thumb}
           alt={item.title}
           fill
-          sizes={`${Math.round(item.width)}px`}
+          // 1.5x the box, so the tile still resolves on a scaled or retina
+          // display. An honest `${width}px` lands the browser on a candidate at
+          // almost exactly 1:1, which is where detail in the work starts to go.
+          sizes={`${Math.round(item.width * 1.5)}px`}
+          quality={90}
           className="object-cover transition-transform duration-[400ms] ease-in-out group-hover:scale-[1.03]"
           draggable={false}
         />

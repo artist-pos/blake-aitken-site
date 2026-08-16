@@ -43,6 +43,11 @@ export default function WorkImageGrid({
     <RowsPhotoAlbum
       photos={photos}
       targetRowHeight={rowHeight}
+      // Without this a work with one or two images has its only row justified
+      // to the full container width, so a single portrait scan renders metres
+      // tall. Capping it at the target height puts that case back under the
+      // row-height slider like every other row.
+      rowConstraints={{ singleRowMaxHeight: rowHeight }}
       spacing={hGap}
       componentsProps={{
         container: { style: { rowGap: `${vGap}px` } },
@@ -59,7 +64,9 @@ export default function WorkImageGrid({
                 src={img.url}
                 alt={img.alt ?? projectTitle}
                 fill
-                sizes={`${Math.round(width)}px`}
+                // Headroom for scaled and retina displays — see DisciplineIndex.
+                sizes={`${Math.round(width * 1.5)}px`}
+                quality={90}
                 style={{ objectFit: 'cover' }}
               />
               <button

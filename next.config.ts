@@ -2,6 +2,9 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
+    // 75 is Next's default and stays for anything incidental; the work itself is
+    // served at 90. Next 16 rejects any quality not listed here.
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: 'https',
