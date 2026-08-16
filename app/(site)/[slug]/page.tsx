@@ -33,7 +33,7 @@ export default async function ProjectPage({
   if (!project) notFound()
 
   const [{ prev, next }, { data: { user } }, developments] = await Promise.all([
-    getAdjacentProjects(project.sort_order ?? 0),
+    getAdjacentProjects(project.slug, project.category),
     supabase.auth.getUser(),
     getProjectDevelopments(project.id),
   ])

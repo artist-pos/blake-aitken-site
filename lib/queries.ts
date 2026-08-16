@@ -1,6 +1,6 @@
 import { createClient } from './supabase/server'
 import { createStaticClient } from './supabase/static'
-import type { BlogPost, CategoryLayout, Project } from './types'
+import type { BlogPost, CategoryLayout, Discipline, Project } from './types'
 
 export async function getFeaturedProject(): Promise<Project | null> {
   const supabase = await createClient()
@@ -21,7 +21,10 @@ export async function getProjects(): Promise<Project[]> {
     .from('projects')
     .select('*, images:project_images(*)')
     .eq('archived', false)
+    // created_at breaks ties so the grid and prev/next agree: a newly created
+    // project defaults to sort_order 0 until it is dragged.
     .order('sort_order')
+    .order('created_at')
   return data ?? []
 }
 
@@ -36,29 +39,37 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   return data
 }
 
+type Adjacent = { title: string; slug: string }
+
+/**
+ * Prev/next stays inside the work's own discipline and wraps at either end, so
+ * paging through Art never lands you in Architecture. Reads the whole
+ * discipline in one query rather than bracketing on sort_order — these are
+ * tens of rows, and it makes the wrap a modulo instead of two more round-trips.
+ */
 export async function getAdjacentProjects(
-  sortOrder: number
-): Promise<{ prev: { title: string; slug: string } | null; next: { title: string; slug: string } | null }> {
+  slug: string,
+  category: Discipline
+): Promise<{ prev: Adjacent | null; next: Adjacent | null }> {
   const supabase = await createClient()
-  const [{ data: prevData }, { data: nextData }] = await Promise.all([
-    supabase
-      .from('projects')
-      .select('title, slug')
-      .eq('archived', false)
-      .lt('sort_order', sortOrder)
-      .order('sort_order', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    supabase
-      .from('projects')
-      .select('title, slug')
-      .eq('archived', false)
-      .gt('sort_order', sortOrder)
-      .order('sort_order')
-      .limit(1)
-      .maybeSingle(),
-  ])
-  return { prev: prevData ?? null, next: nextData ?? null }
+  const { data } = await supabase
+    .from('projects')
+    .select('title, slug')
+    .eq('archived', false)
+    .eq('category', category)
+    .order('sort_order')
+    .order('created_at')
+
+  const works = (data ?? []) as Adjacent[]
+  const i = works.findIndex((w) => w.slug === slug)
+  // A discipline of one has nowhere to page to, and wrapping would just link
+  // the work to itself.
+  if (i < 0 || works.length < 2) return { prev: null, next: null }
+
+  return {
+    prev: works[(i - 1 + works.length) % works.length],
+    next: works[(i + 1) % works.length],
+  }
 }
 
 export async function getRecentPosts(limit = 3): Promise<BlogPost[]> {
