@@ -1,6 +1,6 @@
 import { createClient } from './supabase/server'
 import { createStaticClient } from './supabase/static'
-import type { BlogPost, Project } from './types'
+import type { BlogPost, CategoryLayout, Project } from './types'
 
 export async function getFeaturedProject(): Promise<Project | null> {
   const supabase = await createClient()
@@ -129,6 +129,14 @@ export async function getHomeSlides(): Promise<HomeSlide[]> {
     .eq('enabled', true)
     .order('sort_order')
   return data ?? []
+}
+
+export async function getCategoryLayouts(): Promise<CategoryLayout[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('category_layouts')
+    .select('category, row_height, h_gap, v_gap, last_row')
+  return (data ?? []) as CategoryLayout[]
 }
 
 export async function getProjectDevelopments(projectId: string) {

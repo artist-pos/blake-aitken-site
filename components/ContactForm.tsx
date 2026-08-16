@@ -8,14 +8,18 @@ interface FormState {
   message: string
 }
 
+// Ruled, not boxed: a grey underline is the only mark, so the fields read as
+// part of the page's hairline grid rather than as white cards floating on it.
 const inputStyle: React.CSSProperties = {
   display: 'block',
   width: '100%',
-  padding: '10px 12px',
+  padding: '8px 0',
   fontSize: '13px',
   color: '#1a1a1a',
-  backgroundColor: '#ffffff',
-  border: '1px solid rgba(0,0,0,0.15)',
+  backgroundColor: 'transparent',
+  border: 'none',
+  borderBottom: '1px solid rgba(0,0,0,0.15)',
+  borderRadius: 0,
   outline: 'none',
   transition: 'border-color 150ms',
 }
@@ -54,7 +58,7 @@ function Field({ label, name, type = 'text', required, disabled }: FieldProps) {
         disabled={disabled}
         style={{
           ...inputStyle,
-          borderColor: focused ? '#1a1a1a' : 'rgba(0,0,0,0.15)',
+          borderBottomColor: focused ? '#1a1a1a' : 'rgba(0,0,0,0.15)',
           opacity: disabled ? 0.5 : 1,
         }}
         onFocus={() => setFocused(true)}
@@ -81,7 +85,7 @@ function TextAreaField({ label, name, required, disabled }: Omit<FieldProps, 'ty
         style={{
           ...inputStyle,
           resize: 'vertical',
-          borderColor: focused ? '#1a1a1a' : 'rgba(0,0,0,0.15)',
+          borderBottomColor: focused ? '#1a1a1a' : 'rgba(0,0,0,0.15)',
           opacity: disabled ? 0.5 : 1,
         }}
         onFocus={() => setFocused(true)}

@@ -1,8 +1,18 @@
+export type Discipline = 'art' | 'architecture' | 'concept' | 'venture' | 'university'
+
+export interface CategoryLayout {
+  category: Discipline
+  row_height: number
+  h_gap: number
+  v_gap: number
+  last_row: 'left' | 'center' | 'fill'
+}
+
 export interface Project {
   id: string
   title: string
   slug: string
-  category: 'art' | 'architecture' | 'concept' | 'venture'
+  category: Discipline
   date: string
   location?: string
   description?: string

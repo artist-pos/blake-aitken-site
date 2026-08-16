@@ -108,10 +108,7 @@ export default function HeroSection({ slides, statement }: Props) {
   }
 
   return (
-    <section
-      className="flex max-md:flex-col"
-      style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}
-    >
+    <section className="flex max-md:flex-col">
       {/* Statement — left column, stretches to carousel height */}
       <div
         ref={colRef}

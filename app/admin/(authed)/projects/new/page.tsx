@@ -95,7 +95,7 @@ export default function NewProjectPage() {
           <div>
             <label style={labelStyle}>Category *</label>
             <select style={inputStyle} value={category} onChange={(e) => setCategory(e.target.value)}>
-              {['art', 'architecture', 'concept', 'venture'].map((c) => (
+              {['art', 'architecture', 'concept', 'venture', 'university'].map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>

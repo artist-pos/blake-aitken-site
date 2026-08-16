@@ -4,13 +4,15 @@ import { useState, useMemo } from 'react'
 import FilterBar from './FilterBar'
 import DisciplineIndex from './DisciplineIndex'
 import ProjectListView from './ProjectListView'
-import type { Project } from '@/lib/types'
+import type { CategoryLayout, Project } from '@/lib/types'
 
 interface Props {
   projects: Project[]
+  isAdmin?: boolean
+  layouts?: CategoryLayout[]
 }
 
-export default function ProjectSection({ projects }: Props) {
+export default function ProjectSection({ projects, isAdmin = false, layouts = [] }: Props) {
   const [activeCategory, setActiveCategory] = useState('All')
   const [view, setView] = useState<'grid' | 'list'>('grid')
 
@@ -30,7 +32,7 @@ export default function ProjectSection({ projects }: Props) {
         onView={setView}
       />
       {view === 'grid' ? (
-        <DisciplineIndex projects={filtered} />
+        <DisciplineIndex projects={filtered} isAdmin={isAdmin} layouts={layouts} />
       ) : (
         <ProjectListView projects={filtered} />
       )}

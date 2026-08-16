@@ -109,7 +109,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           <div>
             <label style={labelStyle}>Category *</label>
             <select style={inputStyle} value={form.category} onChange={(e) => set('category', e.target.value)}>
-              {['art', 'architecture', 'concept', 'venture'].map((c) => <option key={c} value={c}>{c}</option>)}
+              {['art', 'architecture', 'concept', 'venture', 'university'].map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           <div>

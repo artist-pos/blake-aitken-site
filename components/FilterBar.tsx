@@ -1,7 +1,6 @@
 'use client'
 
-const CATEGORIES = ['All', 'Art', 'Architecture', 'Concept', 'Venture'] as const
-type Category = (typeof CATEGORIES)[number]
+const CATEGORIES = ['All', 'Art', 'Architecture', 'Concept', 'Venture', 'University'] as const
 
 interface Props {
   active: string
@@ -16,7 +15,6 @@ export default function FilterBar({ active, view, onCategory, onView }: Props) {
       id="works"
       className="flex items-center justify-between px-12 max-md:px-5"
       style={{
-        borderBottom: '1px solid rgba(0,0,0,0.08)',
         paddingTop: '10px',
         paddingBottom: '10px',
       }}
