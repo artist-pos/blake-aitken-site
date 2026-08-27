@@ -23,9 +23,9 @@ import type { CategoryLayout, Discipline, Project } from '@/lib/types'
 const DISCIPLINE_ORDER: Discipline[] = [
   'art',
   'architecture',
+  'university',
   'concept',
   'venture',
-  'university',
 ]
 
 const DISCIPLINE_LABELS: Record<Discipline, string> = {

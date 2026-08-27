@@ -10,7 +10,6 @@ interface Props {
   statement: string
 }
 
-const DEFAULT_STATEMENT = 'I design civic systems that make invisible social contracts visible.'
 const MIN_FONT = 34
 const CAROUSEL_VH = 0.58
 const CAROUSEL_MAX_H = 480
@@ -94,10 +93,13 @@ export default function HeroSection({ slides, statement }: Props) {
     return () => clearInterval(t)
   }, [slides.length])
 
-  // Fallback: no slides
-  const text = statement || DEFAULT_STATEMENT
+  // An empty statement means the statement is deliberately off, not missing —
+  // render nothing rather than substituting a placeholder.
+  const text = statement.trim()
+  const hasStatement = text.length > 0
 
   if (!slides.length) {
+    if (!hasStatement) return null
     return (
       <section className="px-12 py-14 max-md:px-5 max-md:py-9">
         <p style={{ fontSize: 34, lineHeight: 1.1, letterSpacing: '-0.02em', fontWeight: 400, maxWidth: '18ch', color: '#1a1a1a' }}>
@@ -109,6 +111,8 @@ export default function HeroSection({ slides, statement }: Props) {
 
   return (
     <section className="flex max-md:flex-col">
+      {hasStatement && (
+      <>
       {/* Statement — left column, stretches to carousel height */}
       <div
         ref={colRef}
@@ -144,6 +148,8 @@ export default function HeroSection({ slides, statement }: Props) {
           {text}
         </p>
       </div>
+      </>
+      )}
 
       {/* Carousel */}
       <div

@@ -1,6 +1,6 @@
 'use client'
 
-const CATEGORIES = ['All', 'Art', 'Architecture', 'Concept', 'Venture', 'University'] as const
+const CATEGORIES = ['All', 'Art', 'Architecture', 'University', 'Concept', 'Venture'] as const
 
 interface Props {
   active: string
