@@ -13,6 +13,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // PostHog's /static and /array paths need the same trailing-slash handling.
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    // 'us' or 'eu', matching the region of the PostHog project.
+    const region = process.env.NEXT_PUBLIC_POSTHOG_REGION ?? 'us'
+    const host = `https://${region}.i.posthog.com`
+    const assetHost = `https://${region}-assets.i.posthog.com`
+    return [
+      { source: '/ingest/static/:path*', destination: `${assetHost}/static/:path*` },
+      { source: '/ingest/array/:path*', destination: `${assetHost}/array/:path*` },
+      { source: '/ingest/:path*', destination: `${host}/:path*` },
+    ]
+  },
   async redirects() {
     return [
       // Projects moved from /work/<slug> to /<slug>. These four used to point
